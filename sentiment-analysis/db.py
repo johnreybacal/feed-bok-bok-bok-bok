@@ -1,7 +1,9 @@
+import pathlib
 import sqlalchemy
 from sqlalchemy import text
 
-engine = sqlalchemy.create_engine('sqlite:///../backend/db.sqlite3')
+sqlite_path = pathlib.Path(__file__).parent.as_posix().replace("sentiment-analysis", "backend/db.sqlite3");
+engine = sqlalchemy.create_engine('sqlite:///' + sqlite_path)
 
 def save_category(id: str, category: str):
     print(id, category)

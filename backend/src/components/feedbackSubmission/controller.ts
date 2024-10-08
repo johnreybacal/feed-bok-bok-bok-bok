@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { kafkaProducer } from "../../config/kafka";
 import { feedbackSubmissionService as service } from "./service";
 import { submitSchema } from "./validator";
 
@@ -10,6 +11,13 @@ class Controller {
             })
 
             await service.save(name, email, feedback)
+
+            kafkaProducer.send({
+                topic: 'feedback-submitted',
+                messages: [
+                    { value: feedback },
+                ],
+            })
 
             res.status(200).json({
                 message: "Feedback submitted"

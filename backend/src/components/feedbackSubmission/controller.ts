@@ -10,12 +10,15 @@ class Controller {
                 abortEarly: false
             })
 
-            await service.save(name, email, feedback)
+            const { id } = await service.save(name, email, feedback)
 
             kafkaProducer.send({
                 topic: 'feedback-submitted',
                 messages: [
-                    { value: feedback },
+                    {
+                        key: id,
+                        value: feedback
+                    },
                 ],
             })
 

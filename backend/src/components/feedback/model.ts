@@ -20,11 +20,11 @@ Feedback.init({
         allowNull: false,
     },
     email: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     feedback: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     category: {
@@ -34,4 +34,5 @@ Feedback.init({
 }, {
     sequelize,
     modelName: 'Feedback',
+    tableName: 'feedbacks'
 });

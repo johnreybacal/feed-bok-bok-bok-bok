@@ -40,4 +40,4 @@ class Service {
     }
 }
 
-export const feedbackAdministrationService = new Service()
+export const adminService = new Service()

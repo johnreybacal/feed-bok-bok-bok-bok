@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { feedbackAdministrationService as service } from "./service";
+import { adminService as service } from "./service";
 import { listSchema } from "./validator";
 
 class Controller {
@@ -18,4 +18,4 @@ class Controller {
     }
 }
 
-export const feedbackAdministrationController = new Controller();
+export const adminController = new Controller();

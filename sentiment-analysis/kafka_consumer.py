@@ -1,7 +1,7 @@
-
-from json import loads
+import pathlib
 from kafka import KafkaConsumer
 from feedback_analyzer import get_sentiment
+from db import save_category
 
 consumer = KafkaConsumer('feedback-submitted',
                          bootstrap_servers=['localhost:9092'],
@@ -18,9 +18,9 @@ while True:
                 feedback = consumer_record.value.decode('utf-8')
                 score = get_sentiment(feedback)
 
-                print(id)
-                print(feedback)
-                print(score)
+                # print(id)
+                # print(feedback)
+                # print(score)
 
                 category = "neutral"
 
@@ -29,7 +29,8 @@ while True:
                 if score <= -0.2:
                     category = "negative"
 
-                print(category)
+                # print(category)
+                save_category(id, category)
 
         continue
     except Exception as e:

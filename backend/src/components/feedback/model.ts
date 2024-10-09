@@ -7,6 +7,7 @@ export class Feedback extends Model {
     declare email: string;
     declare feedback: string;
     declare category: string;
+    declare createdAt: Date;
 }
 
 Feedback.init({

@@ -10,24 +10,24 @@ import { useSnackbar } from 'notistack';
 import * as React from 'react';
 import { API } from "./config";
 
+const EMPTY_FORM = {
+  name: "",
+  email: "",
+  feedback: ""
+}
+
 export default function FeedbackForm() {
   const [form, setForm] = React.useState({
-    name: "",
-    email: "",
-    feedback: ""
+    ...EMPTY_FORM
   })
   const [errors, setErrors] = React.useState({
-    name: "",
-    email: "",
-    feedback: ""
+    ...EMPTY_FORM
   })
   const { enqueueSnackbar } = useSnackbar();
 
   function submitForm() {
     let validationErrors = {
-      name: "",
-      email: "",
-      feedback: ""
+      ...EMPTY_FORM
     }
     setErrors(validationErrors)
     axios.post(`${API}/feedbacks/submit`, {
@@ -37,12 +37,15 @@ export default function FeedbackForm() {
     })
       .then(function (response) {
         if (response.status === 200) {
+          setForm({
+            ...EMPTY_FORM
+          })
           enqueueSnackbar('Feedback submitted!', { variant: "success" });
         }
       })
       .catch(function (error) {
         const { response } = error
-        if (response.status === 400) {
+        if (response && response.status === 400) {
           response.data.forEach((message) => {
             const field = message.split(" ")[0]
             console.log(field, message)

@@ -54,4 +54,21 @@ describe('FeedbackForm', () => {
         }, 100);
     });
 
+    it('should clear the form when submission is successful', async () => {
+        render(<FeedbackForm />);
+        const mockAxios = jest.mocked(axios);
+        mockAxios.post.mockResolvedValueOnce({
+            status: 200
+        });
+
+        const submitButton = screen.getByText("Submit")
+        fireEvent.click(submitButton);
+
+        setTimeout(() => {
+            expect(screen.getByPlaceholderText('Your name')).toHaveValue('');
+            expect(screen.getByPlaceholderText('Your email')).toHaveValue('');
+            expect(screen.getByPlaceholderText('What do you think?')).toHaveValue('');
+        }, 100);
+    });
+
 });

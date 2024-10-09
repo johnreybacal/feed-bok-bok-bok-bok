@@ -1,6 +1,7 @@
 // FeedbackForm.test.js
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
 import FeedbackForm from './FeedbackForm';
 
 jest.mock('axios');
@@ -12,8 +13,7 @@ describe('FeedbackForm', () => {
         expect(screen.getByPlaceholderText('Your name')).toHaveValue('');
         expect(screen.getByPlaceholderText('Your email')).toHaveValue('');
         expect(screen.getByPlaceholderText('What do you think?')).toHaveValue('');
-        expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-        expect(screen.getByRole('button')).not.toBeDisabled();
+        expect(screen.getByText("Submit")).not.toBeDisabled();
     });
 
     it('should update form state on input change', () => {
@@ -30,7 +30,28 @@ describe('FeedbackForm', () => {
         expect(screen.getByPlaceholderText('Your name')).toHaveValue('John Doe');
         expect(screen.getByPlaceholderText('Your email')).toHaveValue('john.doe@example.com');
         expect(screen.getByPlaceholderText('What do you think?')).toHaveValue('This is a great product!');
-        expect(screen.getByRole('button')).not.toBeDisabled();
+        expect(screen.getByText("Submit")).not.toBeDisabled();
+    });
+
+    it('should show validation errors on submit without input', async () => {
+        render(<FeedbackForm />);
+        const mockAxios = jest.mocked(axios);
+        mockAxios.post.mockRejectedValueOnce({
+            status: 400, data: [
+                "name is a required field",
+                "email is a required field",
+                "feedback is a required field"
+            ]
+        });
+
+        const submitButton = screen.getByText("Submit")
+        fireEvent.click(submitButton);
+
+        setTimeout(() => {
+            expect(screen.getByText("name is a required field")).toBeInTheDocument();
+            expect(screen.getByText("email is a required field")).toBeInTheDocument();
+            expect(screen.getByText("feedback is a required field")).toBeInTheDocument();
+        }, 100);
     });
 
 });

@@ -63,7 +63,7 @@ export default function FeedbackForm() {
   }
 
   return (
-    <Grid container spacing={2} paddingTop={5}>
+    <Grid container spacing={2} paddingTop={5} paddingBottom={5}>
       <Grid>
         <Typography variant="h1" color='white' paddingBottom={5}>
           Tell us what you think

@@ -1,16 +1,34 @@
 
 import { Container } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import './App.css';
 import FeedbackForm from './FeedbackForm';
 
+
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <SnackbarProvider maxSnack={5}>
+        <div class="form-container">
+          <Container maxWidth="sm">
+            <FeedbackForm></FeedbackForm>
+          </Container>
+        </div>
+      </SnackbarProvider>,
+    },
+    {
+      path: "/admin",
+      element: <div>Admin</div>,
+    },
+  ]);
+
   return (
-    <SnackbarProvider maxSnack={5}>
-      <Container maxWidth="sm">
-        <FeedbackForm></FeedbackForm>
-      </Container>
-    </SnackbarProvider>
+    <RouterProvider router={router} />
   );
 }
 

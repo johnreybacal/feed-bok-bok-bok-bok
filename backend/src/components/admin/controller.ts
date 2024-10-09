@@ -10,7 +10,7 @@ class Controller {
             const data = await service.list(params);
 
             res.status(200).json({
-                data
+                ...data
             })
         } catch (err) {
             next(err);

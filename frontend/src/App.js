@@ -5,6 +5,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Admin from './Admin';
 import './App.css';
 import FeedbackForm from './FeedbackForm';
 
@@ -23,7 +24,9 @@ function App() {
     },
     {
       path: "/admin",
-      element: <div>Admin</div>,
+      element: <SnackbarProvider maxSnack={3}>
+        <Admin></Admin>
+      </SnackbarProvider>,
     },
   ]);
 

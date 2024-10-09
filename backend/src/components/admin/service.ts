@@ -2,14 +2,16 @@ import { Op } from "sequelize";
 import { Feedback } from "../feedback/model";
 
 interface ListParameters {
-    from?: Date;
-    to?: Date;
+    from?: string;
+    to?: string;
     category?: string;
+    page: number;
+    pageSize: number;
 }
 
 class Service {
     async list(params: ListParameters) {
-        const { from, to, category } = params
+        const { from, to, category, page, pageSize } = params
         const whereCondition = {};
 
         if (category) {
@@ -36,7 +38,11 @@ class Service {
                 }
             })
         }
-        return await Feedback.findAll({ where: whereCondition });
+        return await Feedback.findAndCountAll({
+            where: whereCondition,
+            limit: pageSize,
+            offset: page * pageSize
+        })
     }
 }
 

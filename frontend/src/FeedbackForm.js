@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Backdrop, CircularProgress, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -23,6 +23,7 @@ export default function FeedbackForm() {
   const [errors, setErrors] = React.useState({
     ...EMPTY_FORM
   })
+  const [isLoading, setIsLoading] = React.useState(false)
   const { enqueueSnackbar } = useSnackbar();
 
   function submitForm() {
@@ -30,6 +31,7 @@ export default function FeedbackForm() {
       ...EMPTY_FORM
     }
     setErrors(validationErrors)
+    setIsLoading(true)
     axios.post(`${API}/feedbacks/submit`, {
       name: form.name,
       email: form.email,
@@ -59,6 +61,8 @@ export default function FeedbackForm() {
         } else {
           enqueueSnackbar('Oops. Something went wrong.', { variant: "error" });
         }
+      }).finally(() => {
+        setIsLoading(false);
       });
   }
 
@@ -66,12 +70,18 @@ export default function FeedbackForm() {
     <Grid container spacing={2} paddingTop={5} paddingBottom={5}>
       <Grid>
         <Typography variant="h1" color='white' paddingBottom={5}>
-          Tell us what you think
+          Tell us what you think.
         </Typography>
       </Grid>
       <Grid>
         <Card>
           <CardContent style={{ paddingTop: 30 }}>
+            <Backdrop
+              sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+              open={isLoading}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
@@ -87,6 +97,7 @@ export default function FeedbackForm() {
                   placeholder='Your name'
                   error={errors.name}
                   helperText={errors.name}
+                  disabled={isLoading}
                   fullWidth
                 />
               </Grid>
@@ -104,6 +115,7 @@ export default function FeedbackForm() {
                   placeholder='Your email'
                   error={errors.email}
                   helperText={errors.email}
+                  disabled={isLoading}
                   fullWidth
                 />
               </Grid>
@@ -121,6 +133,7 @@ export default function FeedbackForm() {
                   placeholder='What do you think?'
                   error={errors.feedback}
                   helperText={errors.feedback}
+                  disabled={isLoading}
                   fullWidth
                   multiline
                   minRows={3}

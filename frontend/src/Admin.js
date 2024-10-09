@@ -2,9 +2,9 @@
 import { Card, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { DataGrid } from '@mui/x-data-grid';
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import axios from "axios";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
@@ -81,10 +81,11 @@ export default function Admin() {
         <Grid container spacing={2} paddingBottom={5}>
           <Grid size={{ xs: 12, md: 2 }}>
             <FormControl fullWidth>
-              <InputLabel>Category</InputLabel>
+              <InputLabel>Select Category</InputLabel>
               <Select
                 value={filter.category}
-                label="Category"
+                label="Select Category"
+                placeholder="Select Category"
                 onChange={e => {
                   setFilter({
                     ...filter,

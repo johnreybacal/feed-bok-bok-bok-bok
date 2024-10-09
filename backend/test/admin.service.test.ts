@@ -44,14 +44,16 @@ describe("AdminService", () => {
         });
 
         it("should filter by category", async () => {
-            const filtered = data.filter((row) => row.category === "positive")
+            const category = "positive"
+            const filtered = data.filter((row) => row.category === category)
+
             jest.spyOn(Feedback, "findAndCountAll").mockResolvedValueOnce({
                 count: filtered.length as any,
                 rows: filtered as any[],
             });
 
             const params = {
-                category: "positive",
+                category,
                 page: 1,
                 pageSize: 10,
             };
@@ -62,5 +64,29 @@ describe("AdminService", () => {
             expect(result.rows).toEqual(filtered);
         });
 
+        it("should filter by date range", async () => {
+            const from = new Date("2023-01-01")
+            const to = new Date("2023-12-31")
+            const filtered = data.filter(
+                (row) => row.createdAt! >= from && row.createdAt! <= to
+            )
+
+            jest.spyOn(Feedback, "findAndCountAll").mockResolvedValueOnce({
+                count: filtered.length as any,
+                rows: filtered as any[],
+            });
+
+            const params = {
+                from: from.toISOString(),
+                to: to.toISOString(),
+                page: 1,
+                pageSize: 10,
+            };
+
+            const result = await adminService.list(params);
+
+            expect(result.count).toEqual(filtered.length)
+            expect(result.rows).toEqual(filtered);
+        });
     });
 });

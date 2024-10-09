@@ -5,53 +5,138 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Grid from "@mui/material/Grid2";
 import TextField from '@mui/material/TextField';
+import axios from "axios";
+import { useSnackbar } from 'notistack';
 import * as React from 'react';
+import { API } from "./config";
 
 export default function FeedbackForm() {
+  const [form, setForm] = React.useState({
+    name: "",
+    email: "",
+    feedback: ""
+  })
+  const [errors, setErrors] = React.useState({
+    name: "",
+    email: "",
+    feedback: ""
+  })
+  const { enqueueSnackbar } = useSnackbar();
+
+  function submitForm() {
+    let validationErrors = {
+      name: "",
+      email: "",
+      feedback: ""
+    }
+    setErrors(validationErrors)
+    axios.post(`${API}/feedbacks/submit`, {
+      name: form.name,
+      email: form.email,
+      feedback: form.feedback
+    })
+      .then(function (response) {
+        if (response.status === 200) {
+          enqueueSnackbar('Feedback submitted!', { variant: "success" });
+        }
+      })
+      .catch(function (error) {
+        const { response } = error
+        if (response.status === 400) {
+          response.data.forEach((message) => {
+            const field = message.split(" ")[0]
+            console.log(field, message)
+            validationErrors = {
+              ...validationErrors,
+              [field]: message
+            }
+          })
+          enqueueSnackbar('Please correct validation errors.', { variant: "warning" });
+          setErrors(validationErrors)
+        } else {
+          enqueueSnackbar('Oops. Something went wrong.', { variant: "error" });
+        }
+      });
+  }
+
   return (
-    <Card>
-      <CardContent>
-        <Typography gutterBottom>
+    <Grid container spacing={2} paddingTop={5}>
+      <Grid>
+        <Typography variant="h1" color='white' paddingBottom={5}>
           Tell us what you think
         </Typography>
-        <Grid container spacing={2}>
-          <Grid size={6}>
-            <TextField
-              required
-              id="outlined-required"
-              label="Name"
-              fullWidth
-            />
-          </Grid>
-          <Grid size={6}>
-            <TextField
-              required
-              id="outlined-required"
-              label="Email"
-              fullWidth
-            />
-          </Grid>
-          <Grid size={12}>
-            <TextField
-              id="outlined-multiline-flexible"
-              label="Feedback"
-              fullWidth
-              multiline
-              minRows={3}
-              maxRows={5}
-            />
-          </Grid>
-        </Grid>
-      </CardContent>
-      <CardActions disableSpacing
-        sx={{
-          justifyContent: "end",
-          alignItems: "start",
-          padding: 2
-        }}
-      >
-        <Button variant="contained">Submit</Button>
-      </CardActions>
-    </Card>
+      </Grid>
+      <Grid>
+        <Card>
+          <CardContent style={{ paddingTop: 30 }}>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  required
+                  label="Name"
+                  value={form.name}
+                  onChange={e => {
+                    setForm({
+                      ...form,
+                      name: e.target.value
+                    });
+                  }}
+                  placeholder='Your name'
+                  error={errors.name}
+                  helperText={errors.name}
+                  fullWidth
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  required
+                  label="Email"
+                  value={form.email}
+                  onChange={e => {
+                    setForm({
+                      ...form,
+                      email: e.target.value
+                    });
+                  }}
+                  placeholder='Your email'
+                  error={errors.email}
+                  helperText={errors.email}
+                  fullWidth
+                />
+              </Grid>
+              <Grid size={12}>
+                <TextField
+                  required
+                  label="Feedback"
+                  value={form.feedback}
+                  onChange={e => {
+                    setForm({
+                      ...form,
+                      feedback: e.target.value
+                    });
+                  }}
+                  placeholder='What do you think?'
+                  error={errors.feedback}
+                  helperText={errors.feedback}
+                  fullWidth
+                  multiline
+                  minRows={3}
+                  maxRows={5}
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+          <CardActions disableSpacing
+            sx={{
+              justifyContent: "end",
+              alignItems: "start",
+              padding: 2
+            }}
+          >
+            <Button variant="contained" onClick={submitForm}>Submit</Button>
+          </CardActions>
+        </Card>
+      </Grid>
+    </Grid>
   );
 }

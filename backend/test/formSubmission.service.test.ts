@@ -23,10 +23,10 @@ describe('FeedbackSubmissionService', () => {
 
             setTimeout(() => {
                 expect(result.id).not.toBeNull();
-                expect(result.name).toBe(mockFeedback.name)
-                expect(result.email).toBe(mockFeedback.email)
-                expect(result.feedback).toBe(mockFeedback.feedback)
-                expect(result.category).toBeNull()
+                expect(result.name).toBe(mockFeedback.name);
+                expect(result.email).toBe(mockFeedback.email);
+                expect(result.feedback).toBe(mockFeedback.feedback);
+                expect(result.category).toBeUndefined();
             }, 100);
         });
     });

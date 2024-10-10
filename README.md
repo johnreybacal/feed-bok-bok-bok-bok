@@ -4,7 +4,11 @@ A simple web app for submitting feedbacks that also includes an admin page for m
 
 ## Architecture
 
-![alt text](architecture.png)
+![Architecture](architecture.png)
+
+## Feedback submission sequence diagram
+
+![Sequence diagram](sequence_diagram.png)
 
 ## Setup
 

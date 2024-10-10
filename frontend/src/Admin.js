@@ -1,5 +1,5 @@
 
-import { Card, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Card, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { DataGrid } from '@mui/x-data-grid';
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -74,83 +74,90 @@ export default function Admin() {
   }, [paginationModel, filter, enqueueSnackbar]);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Card sx={{
-        padding: 5
-      }}>
-        <Grid container spacing={2} paddingBottom={5}>
-          <Grid size={{ xs: 12, md: 2 }}>
-            <FormControl fullWidth>
-              <InputLabel>Select Category</InputLabel>
-              <Select
-                value={filter.category}
-                label="Select Category"
-                placeholder="Select Category"
-                onChange={e => {
-                  setFilter({
-                    ...filter,
-                    category: e.target.value
-                  });
-                }}
-              >
-                <MenuItem value={null}>None</MenuItem>
-                <MenuItem value={"positive"}>Positive</MenuItem>
-                <MenuItem value={"neutral"}>Neutral</MenuItem>
-                <MenuItem value={"negative"}>Negative</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid size={{ xs: 12, md: 3 }}>
-            <FormControl fullWidth>
-              <DateTimePicker
-                label="From"
-                value={filter.from}
-                onChange={e => {
-                  setFilter({
-                    ...filter,
-                    from: e
-                  });
-                }}
-                maxDate={dayjs(filter.to)}
-                timezone="UTC"
+    <Grid container spacing={2} paddingTop={5} paddingBottom={5}>
+      <Grid>
+        <Typography variant="h4" color='white'>
+          Feedbacks
+        </Typography>
+      </Grid>
+      <Grid>
+        <Card sx={{ padding: 5 }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Grid container spacing={2} paddingBottom={5}>
+              <Grid size={{ xs: 12, md: 2 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Select Category</InputLabel>
+                  <Select
+                    value={filter.category}
+                    label="Select Category"
+                    placeholder="Select Category"
+                    onChange={e => {
+                      setFilter({
+                        ...filter,
+                        category: e.target.value
+                      });
+                    }}
+                  >
+                    <MenuItem value={null}>None</MenuItem>
+                    <MenuItem value={"positive"}>Positive</MenuItem>
+                    <MenuItem value={"neutral"}>Neutral</MenuItem>
+                    <MenuItem value={"negative"}>Negative</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid size={{ xs: 12, md: 3 }}>
+                <FormControl fullWidth>
+                  <DateTimePicker
+                    label="From"
+                    value={filter.from}
+                    onChange={e => {
+                      setFilter({
+                        ...filter,
+                        from: e
+                      });
+                    }}
+                    maxDate={dayjs(filter.to)}
+                    timezone="UTC"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid size={{ xs: 12, md: 3 }}>
+                <FormControl fullWidth>
+                  <DateTimePicker
+                    label="To"
+                    value={filter.to}
+                    onChange={e => {
+                      setFilter({
+                        ...filter,
+                        to: e
+                      });
+                    }}
+                    maxDate={dayjs(new Date())}
+                    timezone="UTC"
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+            <Grid size={12}>
+              <DataGrid
+                columns={columns}
+                rows={rows}
+                rowCount={rowCount}
+                loading={isLoading}
+                pageSizeOptions={[5, 10, 50, 100]}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
+                sortingMode="server"
+                disableColumnSorting
+                disableColumnFilter
+                disableColumnMenu
+                disableRowSelectionOnClick
               />
-            </FormControl>
-          </Grid>
-          <Grid size={{ xs: 12, md: 3 }}>
-            <FormControl fullWidth>
-              <DateTimePicker
-                label="To"
-                value={filter.to}
-                onChange={e => {
-                  setFilter({
-                    ...filter,
-                    to: e
-                  });
-                }}
-                maxDate={dayjs(new Date())}
-                timezone="UTC"
-              />
-            </FormControl>
-          </Grid>
-        </Grid>
-        <Grid size={12}>
-          <DataGrid
-            columns={columns}
-            rows={rows}
-            rowCount={rowCount}
-            loading={isLoading}
-            pageSizeOptions={[5, 10, 50, 100]}
-            paginationModel={paginationModel}
-            paginationMode="server"
-            onPaginationModelChange={setPaginationModel}
-            sortingMode="server"
-            disableColumnSorting
-            disableColumnFilter
-            disableColumnMenu
-            disableRowSelectionOnClick
-          />
-        </Grid>
-      </Card>
-    </LocalizationProvider>
+            </Grid>
+          </LocalizationProvider>
+        </Card>
+      </Grid>
+    </Grid >
   )
 }

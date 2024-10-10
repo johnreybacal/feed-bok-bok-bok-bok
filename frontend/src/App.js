@@ -1,6 +1,7 @@
 
 import { Container } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
+import { useEffect } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -11,11 +12,15 @@ import FeedbackForm from './FeedbackForm';
 
 
 function App() {
+  useEffect(() => {
+    document.title = 'Feed-bok';
+  }, []);
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: <SnackbarProvider maxSnack={5}>
-        <div class="form-container">
+        <div class="container">
           <Container maxWidth="sm">
             <FeedbackForm></FeedbackForm>
           </Container>
@@ -25,7 +30,11 @@ function App() {
     {
       path: "/admin",
       element: <SnackbarProvider maxSnack={3}>
-        <Admin></Admin>
+        <div class="container">
+          <Container>
+            <Admin></Admin>
+          </Container>
+        </div>
       </SnackbarProvider>,
     },
   ]);

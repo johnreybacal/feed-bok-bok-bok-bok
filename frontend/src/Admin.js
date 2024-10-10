@@ -76,7 +76,7 @@ export default function Admin() {
   return (
     <Grid container spacing={2} paddingTop={5} paddingBottom={5}>
       <Grid>
-        <Typography variant="h4" color='white'>
+        <Typography variant="h4" color='white' fontWeight={400} >
           Feedbacks
         </Typography>
       </Grid>

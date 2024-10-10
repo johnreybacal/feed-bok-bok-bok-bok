@@ -15,6 +15,16 @@ const EMPTY_FORM = {
   email: "",
   feedback: ""
 }
+const CLIENT_VALIDATION = true;
+
+// https://stackoverflow.com/a/46181
+function isValidEmail(value) {
+  return String(value)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+}
 
 export default function FeedbackForm() {
   const [form, setForm] = React.useState({
@@ -31,6 +41,12 @@ export default function FeedbackForm() {
       ...EMPTY_FORM
     }
     setErrors(validationErrors)
+
+    if (CLIENT_VALIDATION) {
+      if (!validate(form)) {
+        return
+      }
+    }
     setIsLoading(true)
     axios.post(`${API}/feedbacks/submit`, {
       name: form.name,
@@ -64,6 +80,32 @@ export default function FeedbackForm() {
       }).finally(() => {
         setIsLoading(false);
       });
+  }
+
+  function validate() {
+    const validationErrors = {};
+    let isValid = true
+    if (String(form.name).trim().length === 0) {
+      validationErrors.name = "name is a required field"
+      isValid = false;
+    }
+    if (String(form.email).trim().length === 0) {
+      validationErrors.email = "email is a required field"
+      isValid = false;
+    } else if (!isValidEmail(form.email)) {
+      validationErrors.email = "email is not valid"
+      isValid = false;
+    }
+    if (String(form.feedback).trim().length === 0) {
+      validationErrors.feedback = "feedback is a required field"
+      isValid = false;
+    }
+    if (!isValid) {
+      setErrors(validationErrors)
+      enqueueSnackbar('Please correct validation errors.', { variant: "warning" });
+    }
+
+    return isValid
   }
 
   return (

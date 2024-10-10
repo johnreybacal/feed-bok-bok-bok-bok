@@ -1,6 +1,9 @@
 # feed-bok(-bok-bok-bok)
 
-A simple web app for submitting feedbacks that also includes an admin page for monitoring feedbacks
+A simple web app
+
+- for submitting feedbacks
+- and an admin page for monitoring feedbacks
 
 ## Architecture
 

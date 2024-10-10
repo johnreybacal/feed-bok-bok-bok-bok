@@ -17,5 +17,5 @@
 3. Start the development server locally
 
    ```bash
-   npm run dev
+   npm run start
    ```
